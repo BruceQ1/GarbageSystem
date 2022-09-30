@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>垃圾分类修改</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../static/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../static/css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-main">
+
+    <div class="layui-form layuimini-form">
+        <input style="display: none" type="text" id="classificationId" name="classificationId" value="" class="layui-input">
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类名：</label>
+            <div class="layui-input-block">
+                <input type="text" id="classificationName" name="classificationName" placeholder="请输入垃圾分类名" lay-verify="required" autocomplete="off"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类&nbsp;&nbsp;&nbsp;&nbsp;型：</label>
+            <div class="layui-input-block">
+                <select lay-verify="required" id="typeName" name="typeName">
+                    <option value="可回收"  checked="">可回收</option>
+                    <option value="不可回收" >不可回收</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align:center;">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">修&nbsp;&nbsp;&nbsp;&nbsp;改</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            $ = layui.$;
+
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            $.ajax({
+                type: "POST",//方法类型
+                contentType: 'application/json',
+                url: "/classification/updateClassification" ,//url
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (data) {
+                    if (data.status=="SUCCESS"){
+                        layer.msg('垃圾分类修改成功！');
+                    }
+                    setTimeout( function(){
+                        parent.location.reload();//刷新父页面
+                    }, 1000 );//延迟1秒
+                },
+                error : function() {
+                    layer.msg('异常！');
+                }
+            });
+            return false;
+        });
+
+    });
+</script>

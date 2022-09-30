@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xian.garbage.dao.RepairDao">
+
+    <resultMap id="BaseResultMap" type="com.xian.garbage.entity.Repair">
+        <!--@Table repair-->
+        <result property="repairId" column="repair_id" jdbcType="INTEGER"/>
+        <result property="repairTitle" column="repair_title" jdbcType="VARCHAR"/>
+        <result property="repairContent" column="repair_content" jdbcType="VARCHAR"/>
+        <result property="hygienistName" column="hygienist_name" jdbcType="VARCHAR"/>
+        <result property="repairTime" column="repair_time" jdbcType="TIMESTAMP"/>
+        <result property="repairStatus" column="repair_status" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--维修记录数量-->
+    <select id="count" resultType="_int">
+        select count(repair_id)  from garbage_system.repair
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          repair_id, repair_title, repair_content, hygienist_name, repair_time, repair_status
+        from garbage_system.repair
+        where repair_id = #{repairId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          repair_id, repair_title, repair_content, hygienist_name, repair_time, repair_status
+        from garbage_system.repair
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          repair_id, repair_title, repair_content, hygienist_name, repair_time, repair_status
+        from garbage_system.repair
+        <where>
+            <if test="repairId != null">
+                and repair_id = #{repairId}
+            </if>
+            <if test="repairTitle != null and repairTitle != ''">
+                and repair_title = #{repairTitle}
+            </if>
+            <if test="repairContent != null and repairContent != ''">
+                and repair_content = #{repairContent}
+            </if>
+            <if test="hygienistName != null and hygienistName != ''">
+                and hygienist_name = #{hygienistName}
+            </if>
+            <if test="repairTime != null">
+                and repair_time = #{repairTime}
+            </if>
+            <if test="repairStatus != null and repairStatus != ''">
+                and repair_status = #{repairStatus}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="repairId" useGeneratedKeys="true">
+        insert into garbage_system.repair(repair_title, repair_content, hygienist_name, repair_time, repair_status)
+        values (#{repairTitle}, #{repairContent}, #{hygienistName}, #{repairTime}, #{repairStatus})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update garbage_system.repair
+        <set>
+            <if test="repairTitle != null and repairTitle != ''">
+                repair_title = #{repairTitle},
+            </if>
+            <if test="repairContent != null and repairContent != ''">
+                repair_content = #{repairContent},
+            </if>
+            <if test="hygienistName != null and hygienistName != ''">
+                hygienist_name = #{hygienistName},
+            </if>
+            <if test="repairTime != null">
+                repair_time = #{repairTime},
+            </if>
+            <if test="repairStatus != null and repairStatus != ''">
+                repair_status = #{repairStatus},
+            </if>
+        </set>
+        where repair_id = #{repairId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from garbage_system.repair where repair_id = #{repairId}
+    </delete>
+
+</mapper>

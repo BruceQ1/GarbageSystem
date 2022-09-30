@@ -1,0 +1,72 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            {{#  if(d.complainStatus =="投诉处理中"){ }}
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="complain">已处理</a>
+            {{#  } }}
+        </script>
+
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+        table.render({
+            elem: '#currentTableId',
+            url: '/complain/complainList',
+            toolbar: '#toolbarDemo',
+            cols: [
+                [
+                    {field: 'complainId', title: '投诉记录',align: 'center',width:120, sort: true},
+                    {field: 'complainTitle', align: 'center', title: '投诉事件'},
+                    {field: 'complainContent', align: 'center', title: '投诉内容'},
+                    {field: 'hygienistName', align: 'center',width:100, title: '卫生员'},
+                    {field: 'complainTime', align: 'center', title: '投诉时间'},
+                    {field: 'complainStatus', align: 'center',width:150, title: '处理进度'},
+                    {title: '操作', width:100, toolbar: '#currentTableBar', align: "center"}
+                ]
+            ],
+            id: 'currentTableId',
+            page: true
+        });
+
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+
+            //维修完成
+            if (obj.event === 'complain') {
+                $.ajax({
+                    url: '/complain/complainById/' + data.complainId,
+                    contentType: 'application/json',
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.status == "SUCCESS") {
+                            layer.msg('已联系业主处理！');
+                            table.reload('currentTableId');
+                        }else{
+                            layer.msg('失败');
+                        }
+                    },
+                    error: function() {
+                        console.log("ajax error");
+                    }
+                });
+                layer.close(index);
+            }
+        });
+
+    });
+</script>

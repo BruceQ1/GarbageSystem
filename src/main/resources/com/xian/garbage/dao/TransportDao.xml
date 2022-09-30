@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xian.garbage.dao.TransportDao">
+
+    <resultMap id="BaseResultMap" type="com.xian.garbage.entity.Transport">
+        <!--@Table transport-->
+        <result property="transportId" column="transport_id" jdbcType="INTEGER"/>
+        <result property="transportCar" column="transport_car" jdbcType="VARCHAR"/>
+        <result property="transportWeight" column="transport_weight" jdbcType="INTEGER"/>
+        <result property="transportTime" column="transport_time" jdbcType="TIMESTAMP"/>
+        <result property="communityName" column="community_name" jdbcType="VARCHAR"/>
+        <result property="stationName" column="station_name" jdbcType="VARCHAR"/>
+        <result property="classificationType" column="classification_type" jdbcType="VARCHAR"/>
+        <result property="transportStatus" column="transport_status" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--运输记录数量-->
+    <select id="count" resultType="_int">
+        select count(transport_id) from garbage_system.transport
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          transport_id, transport_car, transport_weight, transport_time, community_name, station_name, classification_type, transport_status
+        from garbage_system.transport
+        where transport_id = #{transportId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          transport_id, transport_car, transport_weight, transport_time, community_name, station_name, classification_type, transport_status
+        from garbage_system.transport
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          transport_id, transport_car, transport_weight, transport_time, community_name, station_name, classification_type, transport_status
+        from garbage_system.transport
+        <where>
+            <if test="transportId != null">
+                and transport_id = #{transportId}
+            </if>
+            <if test="transportCar != null and transportCar != ''">
+                and transport_car = #{transportCar}
+            </if>
+            <if test="transportWeight != null">
+                and transport_weight = #{transportWeight}
+            </if>
+            <if test="transportTime != null">
+                and transport_time = #{transportTime}
+            </if>
+            <if test="communityName != null and communityName != ''">
+                and community_name = #{communityName}
+            </if>
+            <if test="stationName != null and stationName != ''">
+                and station_name = #{stationName}
+            </if>
+            <if test="classificationType != null and classificationType != ''">
+                and classification_type = #{classificationType}
+            </if>
+            <if test="transportStatus != null and transportStatus != ''">
+                and transport_status = #{transportStatus}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="transportId" useGeneratedKeys="true">
+        insert into garbage_system.transport(transport_car, transport_weight, transport_time, community_name,station_name, classification_type, transport_status)
+        values (#{transportCar}, #{transportWeight}, #{transportTime}, #{communityName},#{stationName}, #{classificationType}, #{transportStatus})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update garbage_system.transport
+        <set>
+            <if test="transportCar != null and transportCar != ''">
+                transport_car = #{transportCar},
+            </if>
+            <if test="transportWeight != null">
+                transport_weight = #{transportWeight},
+            </if>
+            <if test="transportTime != null">
+                transport_time = #{transportTime},
+            </if>
+            <if test="communityName != null and communityName != ''">
+                community_name = #{communityName},
+            </if>
+            <if test="classificationType != null and classificationType != ''">
+                classification_type = #{classificationType},
+            </if>
+            <if test="transportStatus != null and transportStatus != ''">
+                transport_status = #{transportStatus},
+            </if>
+        </set>
+        where transport_id = #{transportId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from garbage_system.transport where transport_id = #{transportId}
+    </delete>
+
+</mapper>

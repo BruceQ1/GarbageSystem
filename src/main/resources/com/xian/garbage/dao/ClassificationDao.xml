@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xian.garbage.dao.ClassificationDao">
+
+    <resultMap id="BaseResultMap" type="com.xian.garbage.entity.Classification">
+        <!--@Table classification-->
+        <result property="classificationId" column="classification_id" jdbcType="INTEGER"/>
+        <result property="classificationName" column="classification_name" jdbcType="VARCHAR"/>
+        <result property="typeName" column="type_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--垃圾分类数量-->
+    <select id="count" resultType="_int">
+        select count(classification_id) from garbage_system.classification
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          classification_id, classification_name, type_name
+        from garbage_system.classification
+        where classification_id = #{classificationId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          classification_id, classification_name, type_name
+        from garbage_system.classification
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          classification_id, classification_name, type_name
+        from garbage_system.classification
+        <where>
+            <if test="classificationId != null">
+                and classification_id = #{classificationId}
+            </if>
+            <if test="classificationName != null and classificationName != ''">
+                and classification_name = #{classificationName}
+            </if>
+            <if test="typeName != null and typeName != ''">
+                and type_name = #{typeName}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="classificationId" useGeneratedKeys="true">
+        insert into garbage_system.classification(classification_name, type_name)
+        values (#{classificationName}, #{typeName})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update garbage_system.classification
+        <set>
+            <if test="classificationName != null and classificationName != ''">
+                classification_name = #{classificationName},
+            </if>
+            <if test="typeName != null and typeName != ''">
+                type_name = #{typeName},
+            </if>
+        </set>
+        where classification_id = #{classificationId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from garbage_system.classification where classification_id = #{classificationId}
+    </delete>
+
+</mapper>

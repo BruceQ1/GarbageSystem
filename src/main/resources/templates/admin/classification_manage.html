@@ -1,0 +1,101 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        table.render({
+            elem: '#currentTableId',
+            url: '/classification/classificationList',
+            toolbar: '#toolbarDemo',
+            cols: [
+                [
+                    {field: 'classificationId', title: '垃圾分类编号',align: 'center', sort: true},
+                    {field: 'classificationName', align: 'center', title: '垃圾分类名称'},
+                    {field: 'typeName', align: 'center', title: '类型'},
+                    {title: '操作',  toolbar: '#currentTableBar', align: "center"}
+                ]
+            ],
+            id: 'currentTableId',
+            page: true
+        });
+
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+
+                var openWH = miniPage.getOpenWidthHeight();
+
+                var index = layer.open({
+                    title: '编辑垃圾分类',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: [openWH[0] + 'px', openWH[1] + 'px'],
+                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
+                    content: '/classification/toClassificationUpdate',
+                    success:function (layero, index) {
+                        var body=layer.getChildFrame('body',index);//少了这个是不能从父页面向子页面传值的
+                        var iframeWin = layero.find('iframe')[0].contentWindow;
+                        //获取子页面的元素，进行数据渲染
+                        body.find("#classificationId").val(data.classificationId);
+                        body.find('#classificationName').val(data.classificationName);
+                        body.find('#typeName').val(data.typeName);
+                       iframeWin.layui.form.render();
+                    },
+                    end : function() {
+                        layer.close();
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            }
+            // 删除事件
+            if (obj.event === 'delete') {
+                layer.confirm('确定删除该垃圾分类吗？', function(index) {
+                    $.ajax({
+                        url: '/classification/deleteClassificationById/' + data.classificationId,
+                        contentType: 'application/json',
+                        type: "DELETE",
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.status == "SUCCESS") {
+                                layer.msg('删除成功');
+                                table.reload('currentTableId');
+                            }else{
+                                layer.msg('删除失败');
+                            }
+                        },
+                        error: function() {
+                            console.log("ajax error");
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+
+    });
+</script>

@@ -1,0 +1,74 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+    <form id="form1" class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名：</label>
+            <div class="layui-input-block">
+                <input type="text" id="hygienistName" name="hygienistName" placeholder="请输入姓名" lay-verify="required" autocomplete="off"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="hygienistSex" lay-filter="hygienistSex" checked value="男" title="男">
+                <input type="radio" name="hygienistSex" lay-filter="hygienistSex" value="女" title="女">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">年龄：</label>
+            <div class="layui-input-block">
+                <input type="text" id="hygienistAge" name="hygienistAge" placeholder="请输入年龄" lay-verify="required|number" autocomplete="off"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话：</label>
+            <div class="layui-input-block">
+                <input type="number" id="hygienistPhone" name="hygienistPhone" placeholder="请输入电话" lay-verify="required|phone" autocomplete="off"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱：</label>
+            <div class="layui-input-block">
+                <input type="email" id="hygienistMail" name="hygienistMail" placeholder="请输入邮箱" lay-verify="email" autocomplete="off"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align:center; width:100%;height:100%;margin:0px;">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="sub">添&nbsp;&nbsp;&nbsp;&nbsp;加</button>
+        </div>
+    </form>
+    </div>
+</div>
+<script>
+    layui.use(['form','jquery'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+        form.on('submit(sub)', function (data) {
+            $.ajax({
+                type: "POST",//方法类型
+                contentType: 'application/json',
+                url: "/hygienist/addHygienist" ,//url
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (data) {
+                    if (data.status=="SUCCESS"){
+                        layer.msg('卫生员新增成功！');
+                    }
+                    $('#hygienistName').val('');
+                    $('#hygienistAge').val('');
+                    $('#hygienistPhone').val('');
+                    $('#hygienistMail').val('');
+                },
+                error : function() {
+                    layer.msg('异常！');
+                }
+            });
+            return false;
+        });
+    });
+</script>

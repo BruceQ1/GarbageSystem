@@ -1,0 +1,100 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "/hygienist/main"
+  },
+  "logoInfo": {
+    "title": "Garbage",
+    "image": "../static/images/logo.png"
+  },
+  "menuInfo": [
+    {
+      "title": "卫生员界面",
+      "icon": "fa fa-address-book",
+      "href": "/toHygienist",
+      "target": "_self",
+      "child": [
+        {
+          "title": "主页",
+          "href": "/hygienist/main",
+          "icon": "fa fa-home",
+          "target": "_self"
+        },
+        {
+          "title": "小区信息",
+          "href": "/community/toCommunityInfo",
+          "icon": "fa fa-building",
+          "target": "_self"
+        },
+        {
+          "title": "垃圾分类信息",
+          "icon": "fa fa-reorder",
+          "href": "/classification/toClassificationInfo",
+          "target": "_self"
+        },
+        {
+          "title": "垃圾站信息",
+          "icon": "fa fa-institution",
+          "href": "/station/toStationInfo",
+          "target": "_self"
+        },{
+          "title": "运输信息",
+          "icon": "fa fa-truck",
+          "target": "_self",
+          "child": [
+            {
+              "title": "添加运输",
+              "href": "/transport/toTransportAdd",
+              "icon": "fa fa-plus-circle",
+              "target": "_self"
+            },
+            {
+              "title": "查询运输记录",
+              "href": "/transport/toTransportInfo",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "报修管理",
+          "icon": "fa fa-wrench",
+          "target": "_self",
+          "child": [
+          {
+            "title": "添加报修",
+            "href": "/repair/toRepairAdd",
+            "icon": "fa fa-plus-circle",
+            "target": "_self"
+          },
+          {
+            "title": "报修进度",
+            "href": "/repair/toRepairInfo",
+            "icon": "fa fa-spinner",
+            "target": "_self"
+          }
+        ]
+        },
+        {
+          "title": "投诉管理",
+          "icon": "fa fa-bullhorn",
+          "target": "_self",
+          "child": [
+          {
+            "title": "投诉业主",
+            "href": "/complain/toComplainAdd",
+            "icon": "fa fa-plus-circle",
+            "target": "_self"
+          },
+          {
+            "title": "投诉处理进度",
+            "href": "/complain/toComplainInfo",
+            "icon": "fa fa-spinner",
+            "target": "_self"
+          }
+        ]
+        }
+      ]
+    }
+  ]
+}

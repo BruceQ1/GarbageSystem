@@ -1,0 +1,36 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        table.render({
+            elem: '#currentTableId',
+            url: '/station/stationList',
+            toolbar: '#toolbarDemo',
+            cols: [
+                [
+                    {field: 'stationId', title: '垃圾站编号',align: 'center', sort: true},
+                    {field: 'stationType', align: 'center', title: '垃圾存放类型'},
+                    {field: 'stationName', align: 'center', title: '垃圾站名称'},
+                    {field: 'stationContact', align: 'center', title: '垃圾站负责人'}
+                ]
+            ],
+            id: 'currentTableId',
+            page: true
+        });
+
+    });
+</script>

@@ -1,0 +1,119 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "/admin/main"
+  },
+  "logoInfo": {
+    "title": "Garbage",
+    "image": "../static/images/logo.png"
+  },
+  "menuInfo": [
+    {
+      "title": "管理员界面",
+      "icon": "fa fa-address-book",
+      "href": "/toAdmin",
+      "target": "_self",
+      "child": [
+        {
+          "title": "主页",
+          "href": "/admin/main",
+          "icon": "fa fa-home",
+          "target": "_self"
+        },
+        {
+          "title": "卫生员信息",
+          "icon": "fa fa-male",
+          "target": "_self",
+          "child": [
+            {
+              "title": "卫生员新增",
+              "href": "/hygienist/toHygienistAdd",
+              "icon": "fa fa-plus-circle",
+              "target": "_self"
+            },
+            {
+              "title": "卫生员管理",
+              "href": "/hygienist/toHygienistManage",
+              "icon": "fa fa-edit",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "小区信息",
+          "icon": "fa fa-building",
+          "target": "_self",
+          "child": [
+            {
+              "title": "小区新增",
+              "href": "/community/toCommunityAdd",
+              "icon": "fa fa-plus-circle",
+              "target": "_self"
+            },
+            {
+              "title": "小区管理",
+              "href": "/community/toCommunityManage",
+              "icon": "fa fa-edit",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "垃圾分类信息",
+          "icon": "fa fa-reorder",
+          "target": "_self",
+          "child": [
+            {
+              "title": "垃圾分类新增",
+              "href": "/classification/toClassificationAdd",
+              "icon": "fa fa-plus-circle",
+              "target": "_self"
+            },
+            {
+              "title": "垃圾分类管理",
+              "href": "/classification/toClassificationManage",
+              "icon": "fa fa-edit",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "垃圾站信息",
+          "icon": "fa fa-institution",
+          "target": "_self",
+          "child": [
+            {
+              "title": "垃圾站新增",
+              "href": "/station/toStationAdd",
+              "icon": "fa fa-plus-circle",
+              "target": "_self"
+            },
+            {
+              "title": "垃圾站管理",
+              "href": "/station/toStationManage",
+              "icon": "fa fa-edit",
+              "target": "_self"
+            }
+          ]
+        },{
+          "title": "运输信息",
+          "href": "/transport/toTransportManage",
+          "icon": "fa fa-truck",
+          "target": "_self"
+        },
+        {
+          "title": "报修管理",
+          "href": "/repair/toRepairManage",
+          "icon": "fa fa-wrench",
+          "target": "_self"
+        },
+        {
+          "title": "投诉管理",
+          "href": "/complain/toComplainManage",
+          "icon": "fa fa-bullhorn",
+          "target": "_self"
+        }
+      ]
+    }
+  ]
+}

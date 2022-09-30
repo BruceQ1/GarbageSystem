@@ -1,0 +1,37 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+        table.render({
+            elem: '#currentTableId',
+            url: '/complain/complainByList',
+            toolbar: '#toolbarDemo',
+            cols: [
+                [
+                    {field: 'complainId', title: '投诉记录',align: 'center',width:120, sort: true},
+                    {field: 'complainTitle', align: 'center', title: '投诉事件'},
+                    {field: 'complainContent', align: 'center', title: '投诉内容'},
+                    {field: 'hygienistName', align: 'center',width:100, title: '卫生员'},
+                    {field: 'complainTime', align: 'center', title: '投诉时间'},
+                    {field: 'complainStatus', align: 'center',width:150, title: '处理进度'}
+                ]
+            ],
+            id: 'currentTableId',
+            page: true
+        });
+
+    });
+</script>

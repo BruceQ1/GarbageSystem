@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xian.garbage.dao.StationDao">
+
+    <resultMap id="BaseResultMap" type="com.xian.garbage.entity.Station">
+        <!--@Table station-->
+        <result property="stationId" column="station_id" jdbcType="INTEGER"/>
+        <result property="stationName" column="station_name" jdbcType="VARCHAR"/>
+        <result property="stationType" column="station_type" jdbcType="VARCHAR"/>
+        <result property="stationContact" column="station_contact" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--垃圾站数量-->
+    <select id="count" resultType="_int">
+        select count(station_id) from garbage_system.station
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          station_id, station_name, station_type, station_contact
+        from garbage_system.station
+        where station_id = #{stationId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          station_id, station_name, station_type, station_contact
+        from garbage_system.station
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          station_id, station_name, station_type, station_contact
+        from garbage_system.station
+        <where>
+            <if test="stationId != null">
+                and station_id = #{stationId}
+            </if>
+            <if test="stationName != null and stationName != ''">
+                and station_name = #{stationName}
+            </if>
+            <if test="stationType != null and stationType != ''">
+                and station_type = #{stationType}
+            </if>
+            <if test="stationContact != null and stationContact != ''">
+                and station_contact = #{stationContact}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="stationId" useGeneratedKeys="true">
+        insert into garbage_system.station(station_name, station_type, station_contact)
+        values (#{stationName}, #{stationType}, #{stationContact})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update garbage_system.station
+        <set>
+            <if test="stationName != null and stationName != ''">
+                station_name = #{stationName},
+            </if>
+            <if test="stationType != null and stationType != ''">
+                station_type = #{stationType},
+            </if>
+            <if test="stationContact != null and stationContact != ''">
+                station_contact = #{stationContact},
+            </if>
+        </set>
+        where station_id = #{stationId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from garbage_system.station where station_id = #{stationId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+    <form id="form1" class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类名：</label>
+            <div class="layui-input-block">
+                <input type="text" id="classificationName" name="classificationName" placeholder="请输入垃圾分类名" lay-verify="required" autocomplete="off"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类&nbsp;&nbsp;&nbsp;&nbsp;型：</label>
+            <div class="layui-input-block">
+                <select lay-verify="required" id="typeName" name="typeName">
+                    <option value="可回收"  checked="">可回收</option>
+                    <option value="不可回收" >不可回收</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align:center; width:100%;height:100%;margin:0px;">
+            <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="sub">添&nbsp;&nbsp;&nbsp;&nbsp;加</button>
+        </div>
+    </form>
+    </div>
+</div>
+</html>
+<script>
+    layui.use(['form','jquery'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+        form.on('submit(sub)', function (data) {
+            $.ajax({
+                type: "POST",//方法类型
+                contentType: 'application/json',
+                url: "/classification/addClassification" ,//url
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (data) {
+                    if (data.status=="SUCCESS"){
+                        layer.msg('垃圾分类新增成功！');
+                    }
+                    $('#classificationName').val('');
+                },
+                error : function() {
+                    layer.msg('异常！');
+                }
+            });
+            return false;
+        });
+    });
+</script>

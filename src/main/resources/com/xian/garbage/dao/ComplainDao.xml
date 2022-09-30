@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xian.garbage.dao.ComplainDao">
+
+    <resultMap id="BaseResultMap" type="com.xian.garbage.entity.Complain">
+        <!--@Table complain-->
+        <result property="complainId" column="complain_id" jdbcType="INTEGER"/>
+        <result property="complainTitle" column="complain_title" jdbcType="VARCHAR"/>
+        <result property="complainContent" column="complain_content" jdbcType="VARCHAR"/>
+        <result property="hygienistName" column="hygienist_name" jdbcType="VARCHAR"/>
+        <result property="complainTime" column="complain_time" jdbcType="TIMESTAMP"/>
+        <result property="complainStatus" column="complain_status" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--投诉记录数量-->
+    <select id="count" resultType="_int">
+        select count(complain_id) from garbage_system.complain
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          complain_id, complain_title, complain_content, hygienist_name, complain_time, complain_status
+        from garbage_system.complain
+        where complain_id = #{complainId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          complain_id, complain_title, complain_content, hygienist_name, complain_time, complain_status
+        from garbage_system.complain
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          complain_id, complain_title, complain_content, hygienist_name, complain_time, complain_status
+        from garbage_system.complain
+        <where>
+            <if test="complainId != null">
+                and complain_id = #{complainId}
+            </if>
+            <if test="complainTitle != null and complainTitle != ''">
+                and complain_title = #{complainTitle}
+            </if>
+            <if test="complainContent != null and complainContent != ''">
+                and complain_content = #{complainContent}
+            </if>
+            <if test="hygienistName != null and hygienistName != ''">
+                and hygienist_name = #{hygienistName}
+            </if>
+            <if test="complainTime != null">
+                and complain_time = #{complainTime}
+            </if>
+            <if test="complainStatus != null and complainStatus != ''">
+                and complain_status = #{complainStatus}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="complainId" useGeneratedKeys="true">
+        insert into garbage_system.complain(complain_title, complain_content, hygienist_name, complain_time, complain_status)
+        values (#{complainTitle}, #{complainContent}, #{hygienistName}, #{complainTime}, #{complainStatus})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update garbage_system.complain
+        <set>
+            <if test="complainTitle != null and complainTitle != ''">
+                complain_title = #{complainTitle},
+            </if>
+            <if test="complainContent != null and complainContent != ''">
+                complain_content = #{complainContent},
+            </if>
+            <if test="hygienistName != null and hygienistName != ''">
+                hygienist_name = #{hygienistName},
+            </if>
+            <if test="complainTime != null">
+                complain_time = #{complainTime},
+            </if>
+            <if test="complainStatus != null and complainStatus != ''">
+                complain_status = #{complainStatus},
+            </if>
+        </set>
+        where complain_id = #{complainId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from garbage_system.complain where complain_id = #{complainId}
+    </delete>
+
+</mapper>

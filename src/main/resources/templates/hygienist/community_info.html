@@ -1,0 +1,37 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+        table.render({
+            elem: '#currentTableId',
+            url: '/community/communityList',
+            toolbar: '#toolbarDemo',
+            cols: [
+                [
+                    {field: 'communityId', title: '小区ID',align: 'center', sort: true},
+                    {field: 'communityName', align: 'center', title: '小区名'},
+                    {field: 'hygienistName', align: 'center', title: '联系人'},
+                    {field: 'hygienistPhone', align: 'center', title: '电话'},
+                    {field: 'hygienistMail', align: 'center', title: '邮箱'},
+                    {field: 'communityCreate', align: 'center', title: '创建时间'}
+                ]
+            ],
+            id: 'currentTableId',
+            page: true
+        });
+
+    });
+</script>

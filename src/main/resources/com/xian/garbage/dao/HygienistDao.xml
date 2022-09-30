@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xian.garbage.dao.HygienistDao">
+
+    <resultMap id="BaseResultMap" type="com.xian.garbage.entity.Hygienist">
+        <!--@Table hygienist-->
+        <result property="hygienistId" column="hygienist_id" jdbcType="INTEGER"/>
+        <result property="hygienistName" column="hygienist_name" jdbcType="VARCHAR"/>
+        <result property="hygienistPassword" column="hygienist_password" jdbcType="VARCHAR"/>
+        <result property="hygienistSex" column="hygienist_sex" jdbcType="VARCHAR"/>
+        <result property="hygienistAge" column="hygienist_age" jdbcType="INTEGER"/>
+        <result property="hygienistPhone" column="hygienist_phone" jdbcType="VARCHAR"/>
+        <result property="hygienistMail" column="hygienist_mail" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--卫生员数量-->
+    <select id="count" resultType="_int">
+        select count(hygienist_id) from garbage_system.hygienist;
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          hygienist_id, hygienist_name, hygienist_password, hygienist_sex, hygienist_age, hygienist_phone, hygienist_mail
+        from garbage_system.hygienist
+        where hygienist_id = #{hygienistId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          hygienist_id, hygienist_name, hygienist_password, hygienist_sex, hygienist_age, hygienist_phone, hygienist_mail
+        from garbage_system.hygienist
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          hygienist_id, hygienist_name, hygienist_password, hygienist_sex, hygienist_age, hygienist_phone, hygienist_mail
+        from garbage_system.hygienist
+        <where>
+            <if test="hygienistId != null">
+                and hygienist_id = #{hygienistId}
+            </if>
+            <if test="hygienistName != null and hygienistName != ''">
+                and hygienist_name = #{hygienistName}
+            </if>
+            <if test="hygienistPassword != null and hygienistPassword != ''">
+                and hygienist_password = #{hygienistPassword}
+            </if>
+            <if test="hygienistSex != null and hygienistSex != ''">
+                and hygienist_sex = #{hygienistSex}
+            </if>
+            <if test="hygienistAge != null">
+                and hygienist_age = #{hygienistAge}
+            </if>
+            <if test="hygienistPhone != null and hygienistPhone != ''">
+                and hygienist_phone = #{hygienistPhone}
+            </if>
+            <if test="hygienistMail != null and hygienistMail != ''">
+                and hygienist_mail = #{hygienistMail}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="hygienistId" useGeneratedKeys="true">
+        insert into garbage_system.hygienist(hygienist_name, hygienist_password, hygienist_sex, hygienist_age, hygienist_phone, hygienist_mail)
+        values (#{hygienistName}, #{hygienistPassword}, #{hygienistSex}, #{hygienistAge}, #{hygienistPhone}, #{hygienistMail})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update garbage_system.hygienist
+        <set>
+            <if test="hygienistName != null and hygienistName != ''">
+                hygienist_name = #{hygienistName},
+            </if>
+            <if test="hygienistPassword != null and hygienistPassword != ''">
+                hygienist_password = #{hygienistPassword},
+            </if>
+            <if test="hygienistSex != null and hygienistSex != ''">
+                hygienist_sex = #{hygienistSex},
+            </if>
+            <if test="hygienistAge != null">
+                hygienist_age = #{hygienistAge},
+            </if>
+            <if test="hygienistPhone != null and hygienistPhone != ''">
+                hygienist_phone = #{hygienistPhone},
+            </if>
+            <if test="hygienistMail != null and hygienistMail != ''">
+                hygienist_mail = #{hygienistMail},
+            </if>
+        </set>
+        where hygienist_id = #{hygienistId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from garbage_system.hygienist where hygienist_id = #{hygienistId}
+    </delete>
+
+</mapper>

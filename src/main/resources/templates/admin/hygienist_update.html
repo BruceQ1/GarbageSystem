@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>卫生员修改</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../static/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="../static/css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-main">
+
+    <div class="layui-form layuimini-form">
+        <input style="display: none" type="text" id="hygienistId" name="hygienistId" value="" class="layui-input">
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名：</label>
+            <div class="layui-input-block">
+                <input type="text" id="hygienistName" name="hygienistName" lay-verify="required" value="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="hygienistSex" lay-filter="hygienistSex" checked value="男" title="男">
+                <input type="radio" name="hygienistSex" lay-filter="hygienistSex" value="女" title="女">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">年龄：</label>
+            <div class="layui-input-block">
+                <input type="text" id="hygienistAge" name="hygienistAge" lay-verify="required|number" autocomplete="off"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话：</label>
+            <div class="layui-input-block">
+                <input type="number" id="hygienistPhone" name="hygienistPhone" lay-verify="required|phone" autocomplete="off"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱：</label>
+            <div class="layui-input-block">
+                <input type="email" id="hygienistMail" name="hygienistMail" lay-verify="email" autocomplete="off"  class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="text-align:center;">
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">修&nbsp;&nbsp;&nbsp;&nbsp;改</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="../static/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            $ = layui.$;
+
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            $.ajax({
+                type: "POST",//方法类型
+                contentType: 'application/json',
+                url: "/hygienist/updateHygienist" ,//url
+                data: JSON.stringify(data.field),
+                dataType: "json",
+                success: function (data) {
+                    if (data.status=="SUCCESS"){
+                        layer.msg('卫生员修改成功！');
+                    }
+                    setTimeout( function(){
+                        parent.location.reload();//刷新父页面
+                    }, 1000 );//延迟1秒
+                },
+                error : function() {
+                    layer.msg('异常！');
+                }
+            });
+            return false;
+        });
+
+    });
+</script>

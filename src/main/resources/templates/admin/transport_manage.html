@@ -1,0 +1,74 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            {{#  if(d.transportStatus =="运输中"){ }}
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="complete">完成运输</a>
+            {{#  } }}
+        </script>
+
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+        table.render({
+            elem: '#currentTableId',
+            url: '/transport/transportList',
+            toolbar: '#toolbarDemo',
+            cols: [
+                [
+                    {field: 'transportId', title: '运输记录号',align: 'center', sort: true},
+                    {field: 'transportCar', align: 'center', title: '车牌'},
+                    {field: 'transportWeight', align: 'center', title: '份量(KG)'},
+                    {field: 'transportTime', align: 'center', title: '运输时间'},
+                    {field: 'communityName', align: 'center', title: '小区名'},
+                    {field: 'stationName', align: 'center', title: '垃圾站名'},
+                    {field: 'classificationType', align: 'center', title: '类型'},
+                    {field: 'transportStatus', align: 'center', title: '状态'},
+                    {title: '操作',  toolbar: '#currentTableBar', align: "center"}
+                ]
+            ],
+            id: 'currentTableId',
+            page: true
+        });
+
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+
+            // 完成运输
+            if (obj.event === 'complete') {
+                $.ajax({
+                    url: '/transport/completeById/' + data.transportId,
+                    contentType: 'application/json',
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.status == "SUCCESS") {
+                            layer.msg('垃圾运输完成！');
+                            table.reload('currentTableId');
+                        }else{
+                            layer.msg('失败');
+                        }
+                    },
+                    error: function() {
+                        console.log("ajax error");
+                    }
+                });
+                layer.close(index);
+            }
+        });
+
+    });
+</script>

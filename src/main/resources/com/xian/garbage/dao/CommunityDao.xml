@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xian.garbage.dao.CommunityDao">
+
+    <resultMap id="BaseResultMap" type="com.xian.garbage.entity.Community">
+        <!--@Table community-->
+        <result property="communityId" column="community_id" jdbcType="INTEGER"/>
+        <result property="communityName" column="community_name" jdbcType="VARCHAR"/>
+        <result property="hygienistName" column="hygienist_name" jdbcType="VARCHAR"/>
+        <result property="hygienistMail" column="hygienist_mail" jdbcType="VARCHAR"/>
+        <result property="hygienistPhone" column="hygienist_phone" jdbcType="VARCHAR"/>
+        <result property="communityCreate" column="community_create" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--小区数量-->
+    <select id="count" resultType="_int">
+        select count(community_id) from garbage_system.community
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          community_id, community_name, hygienist_name, hygienist_mail, hygienist_phone, community_create
+        from garbage_system.community
+        where community_id = #{communityId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          community_id, community_name, hygienist_name, hygienist_mail, hygienist_phone, community_create
+        from garbage_system.community
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          community_id, community_name, hygienist_name, hygienist_mail, hygienist_phone, community_create
+        from garbage_system.community
+        <where>
+            <if test="communityId != null">
+                and community_id = #{communityId}
+            </if>
+            <if test="communityName != null and communityName != ''">
+                and community_name = #{communityName}
+            </if>
+            <if test="hygienistName != null and hygienistName != ''">
+                and hygienist_name = #{hygienistName}
+            </if>
+            <if test="hygienistMail != null and hygienistMail != ''">
+                and hygienist_mail = #{hygienistMail}
+            </if>
+            <if test="hygienistPhone != null and hygienistPhone != ''">
+                and hygienist_phone = #{hygienistPhone}
+            </if>
+            <if test="communityCreate != null">
+                and community_create = #{communityCreate}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="communityId" useGeneratedKeys="true">
+        insert into garbage_system.community(community_name, hygienist_name, hygienist_mail, hygienist_phone, community_create)
+        values (#{communityName}, #{hygienistName}, #{hygienistMail}, #{hygienistPhone}, #{communityCreate})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update garbage_system.community
+        <set>
+            <if test="communityName != null and communityName != ''">
+                community_name = #{communityName},
+            </if>
+            <if test="hygienistName != null and hygienistName != ''">
+                hygienist_name = #{hygienistName},
+            </if>
+            <if test="hygienistMail != null and hygienistMail != ''">
+                hygienist_mail = #{hygienistMail},
+            </if>
+            <if test="hygienistPhone != null and hygienistPhone != ''">
+                hygienist_phone = #{hygienistPhone},
+            </if>
+            <if test="communityCreate != null">
+                community_create = #{communityCreate},
+            </if>
+        </set>
+        where community_id = #{communityId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from garbage_system.community where community_id = #{communityId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,38 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+        table.render({
+            elem: '#currentTableId',
+            url: '/repair/repairByList',
+            toolbar: '#toolbarDemo',
+            cols: [
+                [
+                    {field: 'repairId', title: '报修记录',align: 'center',width:120, sort: true},
+                    {field: 'repairTitle', align: 'center', title: '报修事件'},
+                    {field: 'repairContent', align: 'center', title: '报修内容'},
+                    {field: 'hygienistName', align: 'center',width:100, title: '卫生员'},
+                    {field: 'repairTime', align: 'center', title: '报修时间'},
+                    {field: 'repairStatus', align: 'center',width:120, title: '维修状态'}
+                ]
+            ],
+            id: 'currentTableId',
+            page: true
+        });
+
+    });
+</script>
